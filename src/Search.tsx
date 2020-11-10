@@ -51,6 +51,15 @@ interface Item {
   created: Date,
 }
 
+interface Box {
+  _id: string,
+  label: string,
+  items: Item[],
+  location: string,
+  created: Date,
+  updated: Date[],
+}
+
 
 export default function Search(props: SearchProps) {
   const classes = useStyles();
@@ -67,7 +76,7 @@ export default function Search(props: SearchProps) {
       const res = await fetch(`http://localhost:8080/storage/search?term=${value}`);
       const json = await res.json();
       let results: string[] = [];
-      if (json.items) results = results.concat(json.items.map((item: Item) => item.name));
+      if (json.items) results = results.concat(json.items.map((item: {name: string, label: string}) => item.name || item.label));
       setOptions(results);
       setLoading(false);
     })()
