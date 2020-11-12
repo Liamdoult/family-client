@@ -14,6 +14,7 @@ import TableBody from '@material-ui/core/TableBody';
 import { Item } from './api';
 import { PartialBox } from './api';
 import { Box } from './api';
+import { getBox } from './api';
 import Search from './Search';
 
 
@@ -45,17 +46,14 @@ export default function Storage() {
         if ((option as Item).name) {
             setBox(undefined);
             setItem(option as Item);
+            setLoading(false);
         }
         if ((option as PartialBox).label) {
             setItem(undefined);
-            fetch(`http://localhost:8080/storage/box?id=${(option as PartialBox)._id}`).then(
-                res => res.json().then(
-                    json => {
-                        setBox(json as Box);
-                        setLoading(false);
-                    }
-                )
-            )
+            getBox((option as PartialBox)._id).then(box => {
+                setBox(box);
+                setLoading(false);
+            })
         };
     }
 

@@ -5,7 +5,7 @@ export interface Item {
     description: string,
     owner: string | undefined,
     quantity: Number | undefined,
-    created: Date,
+    created: string,
 }
 
 /**
@@ -18,8 +18,8 @@ export interface PartialBox {
     label: string,
     items: string[],
     location: string,
-    created: Date,
-    updated: Date[],
+    created: string,
+    updated: string[],
 }
 
 export interface Box {
@@ -27,11 +27,45 @@ export interface Box {
     label: string,
     items: Item[],
     location: string,
-    created: Date,
-    updated: Date[],
+    created: string,
+    updated: string[],
 }
 
+/**
+ * Search the database for related boxes and items.
+ * 
+ * @param term Search term
+ */
 export async function search(term: string): Promise<{boxes: Array<PartialBox>, items: Array<Item>}> {
     const res = await fetch(`http://localhost:8080/storage/search?term=${term}`);
     return await res.json() as {boxes: Array<PartialBox>, items: Array<Item>};
+}
+
+/**
+ * Get a box by its identifier.
+ * 
+ * @param id Unique box identifier
+ */
+export async function getBox(id: string): Promise<Box> {
+    const res = await fetch(`http://localhost:8080/storage/box?id=${id}`);
+    const json = await res.json();
+    return json as Box;
+}
+
+/**
+ * Register a new box in the database.
+ * 
+ * @param location The location of the box
+ * @param label The label on the box
+ */
+export async function createBox(location: string, label: string): Promise<Box> {
+    const res = await fetch(`http://localhost:8080/storage/box`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({location, label})
+    });
+    const json = await res.json();
+    return json as Box;
 }
