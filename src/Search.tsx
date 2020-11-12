@@ -11,10 +11,9 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: 400,
+    width: "100%",
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -91,7 +90,7 @@ export default function Search(props: SearchProps) {
       loading={loading}
       getOptionLabel={(option) => option}
       filterOptions={(options, state) => options}
-      style={{ width: 400 }}
+      style={{ width: "100$" }}
       renderInput={(params: any) => (
         <Paper component="form" className={classes.root}>
             <TextField
