@@ -9,6 +9,10 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+import { Item } from './api';
+import { PartialBox } from './api';
+import { search } from './api';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -37,60 +41,50 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SearchProps {
-    hook: (value: string) => any,
+    hook: (value: PartialBox | Item | null) => any,
     disabled?: boolean,
 }
-
-interface Item {
-  _id: string,
-  name: string,
-  description: string,
-  owner: string | undefined,
-  quantity: Number | undefined,
-  created: Date,
-}
-
-interface Box {
-  _id: string,
-  label: string,
-  items: Item[],
-  location: string,
-  created: Date,
-  updated: Date[],
-}
-
 
 export default function Search(props: SearchProps) {
   const classes = useStyles();
   const [ value, setValue ] = useState<string>("");
   const [ loading, setLoading ] = useState<boolean>(false);
-  const [ options, setOptions ] = useState<string[]>([]);
+  const [ options, setOptions ] = useState<Array<PartialBox | Item>>([]);
 
   const { hook, disabled } = props;
 
   useEffect(() => {
     if (value === "") return;
     setLoading(true);
-    (async () => {
-      const res = await fetch(`http://localhost:8080/storage/search?term=${value}`);
-      const json = await res.json();
-      let results: string[] = [];
-      if (json.items) results = results.concat(json.items.map((item: {name: string, label: string}) => item.name || item.label));
+    search(value).then(res => {
+      let results: Array<PartialBox | Item> = [];
+      results = results.concat(res.boxes);
+      results = results.concat(res.items);
       setOptions(results);
       setLoading(false);
-    })()
+    });
   }, [value]);
+
+  function handleChange(event: object, value: string | PartialBox | Item | null, reason: string) {
+    if (reason === "select-option") {
+      if (typeof(value) !== "string") {
+        hook(value);
+      }
+    }
+  }
 
   return (
     <Autocomplete
       id="search-ac"
       freeSolo
       // open={true}
+      disabled={disabled}
       options={options}
       loading={loading}
-      getOptionLabel={(option) => option}
+      getOptionLabel={(option: PartialBox | Item) => (option as Item).name || (option as PartialBox).label}
       filterOptions={(options, state) => options}
       style={{ width: "100$" }}
+      onChange={handleChange}
       renderInput={(params: any) => (
         <Paper component="form" className={classes.root}>
             <TextField
@@ -100,7 +94,7 @@ export default function Search(props: SearchProps) {
                 onChange={ event => setValue(event.target.value) }
                 autoComplete="off"
             />
-            <IconButton onClick={ () => hook(value) } className={classes.iconButton} aria-label="search" disabled={disabled}>
+            <IconButton className={classes.iconButton} aria-label="search" disabled={disabled}>
                 <SearchIcon />
             </IconButton>
         </Paper>

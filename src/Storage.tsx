@@ -11,6 +11,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 
+import { Item } from './api';
+import { PartialBox } from './api';
+import { Box } from './api';
 import Search from './Search';
 
 
@@ -28,43 +31,32 @@ const useStyles = makeStyles((theme) => ({
       minWidth: 650,
     },
   }));
-  
-  interface Item {
-    _id: string,
-    name: string,
-    description: string,
-    owner: string | undefined,
-    quantity: Number | undefined,
-    created: Date,
-  }
-  
-  interface Box {
-    _id: string,
-    items: Item[],
-    location: string,
-    created: Date,
-    updated: Date[],
-  }
-  
-
 
 export default function Storage() {
     const classes = useStyles();
 
     const [loading, setLoading] = useState<boolean>(false);
-    const [box, setBox] = useState<Box|undefined>(undefined);
+    const [box, setBox] = useState<Box | undefined>(undefined);
+    const [item, setItem] = useState<Item | undefined>(undefined);
 
-    function handleSubmit(boxId: string) {
-    setLoading(true);
-    fetch(`http://localhost:8080/storage/box?id=${boxId}`).then(res => {
-        res.json().then(json => {
-        console.log(json);
-        setBox(json);
-        })
-    }).catch(err => {
-        console.log(err);
-        setLoading(false);
-    });
+    function handleSubmit(option: PartialBox | Item | null) {
+        console.log(option);
+        setLoading(true);
+        if ((option as Item).name) {
+            setBox(undefined);
+            setItem(option as Item);
+        }
+        if ((option as PartialBox).label) {
+            setItem(undefined);
+            fetch(`http://localhost:8080/storage/box?id=${(option as PartialBox)._id}`).then(
+                res => res.json().then(
+                    json => {
+                        setBox(json as Box);
+                        setLoading(false);
+                    }
+                )
+            )
+        };
     }
 
     return (
@@ -79,7 +71,39 @@ export default function Storage() {
                 <Grid item xs={3}></Grid>
                 <Grid item xs={6}>
                     <Paper>
-                        content/results
+                        {item? <div>
+                            {item._id}
+                        </div>:<></>}
+                        {box? <div>
+                            {box._id}<br />
+                            {box.label}<br />
+                            {box.location}<br />
+                            {box.created}<br />
+                            <TableContainer component={Paper}>
+                                <Table className={classes.table} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow key="heading">
+                                    <TableCell>Name</TableCell>
+                                    <TableCell align="right">Description</TableCell>
+                                    <TableCell align="right">Created</TableCell>
+                                    <TableCell align="right">Owner</TableCell>
+                                    <TableCell align="right">Quantity</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {box.items.map((containedItem: Item) => (
+                                        <TableRow key={containedItem._id}>
+                                            <TableCell component="th" scope="row">{containedItem.name}</TableCell>
+                                            <TableCell align="right">{containedItem.description}</TableCell>
+                                            <TableCell align="right">{containedItem.created}</TableCell>
+                                            <TableCell align="right">{containedItem.owner || ""}</TableCell>
+                                            <TableCell align="right">{containedItem.quantity || 1}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </div>:<></>}
                     </Paper>
                 </Grid>
                 <Grid item xs={3}></Grid>
@@ -87,39 +111,3 @@ export default function Storage() {
         </div>
     );
 }
-
-{/* {
-    box !== undefined? 
-    <Paper className={classes.paper}>
-    {box._id}<br />
-    {box.location}<br />
-    {box.created}<br />
-    <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-            <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Created</TableCell>
-            <TableCell align="right">Owner</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {box.items.map((item: Item) => (
-            <TableRow key={item._id}>
-                <TableCell component="th" scope="row">
-                {item.name}
-                </TableCell>
-                <TableCell align="right">{item.description}</TableCell>
-                <TableCell align="right">{item.created}</TableCell>
-                <TableCell align="right">{item.owner || ""}</TableCell>
-                <TableCell align="right">{item.quantity || 1}</TableCell>
-            </TableRow>
-            ))}
-        </TableBody>
-        </Table>
-    </TableContainer>
-    </Paper>:<></>
-}
- */}
