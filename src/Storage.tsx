@@ -41,7 +41,6 @@ export default function Storage() {
     const [item, setItem] = useState<Item | undefined>(undefined);
 
     function handleSubmit(option: PartialBox | Item | null) {
-        console.log(option);
         setLoading(true);
         if ((option as Item).name) {
             setBox(undefined);

@@ -8,7 +8,11 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
+
+import BoxIcon from './box.svg';
 import { Item } from './api';
 import { PartialBox } from './api';
 import { search } from './api';
@@ -72,6 +76,24 @@ export default function Search(props: SearchProps) {
       }
     }
   }
+  function renderItem(item: Item) {
+    return <div>{item.name}</div>;
+  }
+
+  function renderBox(box: PartialBox) {
+    return (
+       <Grid style={{width: "100%"}} container spacing={3}>
+        <Grid item style={{width: "50px", height: "100%"}} alignContent="center"><img src={BoxIcon}></img></Grid>
+        <Grid item style={{flexGrow: 1}}>
+          <Typography variant="h6" gutterBottom>{box.label}</Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Typography variant="caption" display="block" gutterBottom>{box.location}</Typography>
+          <Typography variant="caption" display="block" gutterBottom>{box.items.length}</Typography>
+        </Grid>
+      </Grid>
+    )
+  }
 
   return (
     <Autocomplete
@@ -82,6 +104,10 @@ export default function Search(props: SearchProps) {
       options={options}
       loading={loading}
       getOptionLabel={(option: PartialBox | Item) => (option as Item).name || (option as PartialBox).label}
+      renderOption={(option: PartialBox | Item) => {
+        if ((option as Item).name) return renderItem(option as Item);
+        else return renderBox(option as PartialBox);
+      }}
       filterOptions={(options, state) => options}
       style={{ width: "100$" }}
       onChange={handleChange}
