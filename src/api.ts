@@ -58,7 +58,7 @@ export async function getBox(id: string): Promise<Box> {
  * @param location The location of the box
  * @param label The label on the box
  */
-export async function createBox(location: string, label: string): Promise<Box> {
+export async function createBox(label: string, location: string) : Promise<Box> {
     const res = await fetch(`http://localhost:8080/storage/box`, {
         method: "POST",
         headers: {

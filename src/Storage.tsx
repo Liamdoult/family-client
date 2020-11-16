@@ -16,6 +16,7 @@ import { PartialBox } from './api';
 import { Box } from './api';
 import { getBox } from './api';
 import Search from './Search';
+import CreateBox from './CreateBox';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +101,8 @@ export default function Storage() {
                                 </TableBody>
                                 </Table>
                             </TableContainer>
-                        </div>:<></>}
+                        </div>
+			:<CreateBox setBox={setBox}/>}
                     </Paper>
                 </Grid>
                 <Grid item xs={3}></Grid>
