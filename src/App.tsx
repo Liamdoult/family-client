@@ -16,10 +16,12 @@ import Menu from '@material-ui/core/Menu';
 // import MenuIcon from '@material-ui/icons/Menu';
 // import SearchIcon from '@material-ui/icons/Search';
 import InboxIcon from '@material-ui/icons/Inbox';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 import './App.css';
 
 import Storage from "./Storage";
+import Shopping from "./Shopping";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -190,6 +192,13 @@ function App() {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+           <Link to="/shopping" style={{ textDecoration: 'none' }}>
+              <IconButton aria-label="go to storage" color="inherit">
+                <Badge badgeContent={0} color="secondary">
+                  <AssignmentTurnedInIcon style={{color: "white"}}/>
+                </Badge>
+              </IconButton>
+            </Link>
             <Link to="/storage" style={{ textDecoration: 'none' }}>
               <IconButton aria-label="go to storage" color="inherit">
                 <Badge badgeContent={0} color="secondary">
@@ -229,12 +238,15 @@ function App() {
       {renderMobileMenu}
       {renderMenu}
       <Switch>
+        <Route path="/shopping">
+            <Shopping />
+        </Route>
         <Route path="/storage">
             <Storage />
-          </Route>
-          <Route path="/">
+        </Route>
+        <Route path="/">
             <>HOME</>
-          </Route>
+        </Route>
         </Switch>
     </div>
     </Router>
