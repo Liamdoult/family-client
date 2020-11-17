@@ -31,6 +31,21 @@ export interface Box {
     updated: string[],
 }
 
+export interface PartialShoppingItem {
+    name: string;
+    description: string;
+    quantity: number;
+    measure: string;
+}
+
+export interface ShoppingItem extends PartialShoppingItem {
+    _id: string,
+    onList: boolean,
+    created: Date,
+    purchased?: Date,
+    deleted?: Date,
+}
+
 /**
  * Search the database for related boxes and items.
  * 
@@ -69,3 +84,55 @@ export async function createBox(label: string, location: string) : Promise<Box> 
     const json = await res.json();
     return json as Box;
 }
+
+/**
+ * Get a list of all shopping items that are still required.
+ */
+export async function getShopping(): Promise<Array<ShoppingItem>> {
+    const res = await fetch(`http://localhost:8080/shopping`);
+    const json = await res.json();
+    return json.items as Array<ShoppingItem>;
+}
+
+
+/**
+ * Register new items to the shopping list. 
+ * 
+ * @param items List of items that need to be added to the shopping list.
+ */
+export async function createItems(items: Array<PartialShoppingItem>) : Promise<Array<ShoppingItem>> {
+    const res = await fetch(`http://localhost:8080/shopping`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({items})
+    });
+    const json = await res.json();
+    return json.items as Array<ShoppingItem>;
+}
+
+/**
+ * Delete an item.
+ *
+ * @param item The item that needs to be deleted.
+ */
+export async function deleted(item: ShoppingItem) {
+    await fetch(`http://localhost:8080/shopping?id=${item._id}`, {
+        method: "DELETE",
+    });
+
+}
+
+/**
+ * Mark an item as purchased.
+ * 
+ * @param item The item that needs to be marked.
+ */
+export async function purchased(item: ShoppingItem) {
+    await fetch(`http://localhost:8080/shopping?id=${item._id}&purchased`, {
+        method: "PATCH",
+    });
+
+}
+
