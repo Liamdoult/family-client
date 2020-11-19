@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const columns = [
-  { field: 'name', headerName: 'Name', width: 70 },
-  { field: 'description', headerName: 'Description', width: 130 },
+  { field: 'name', headerName: 'Name', width: 300 },
+  { field: 'description', headerName: 'Description', width: 300 },
   { field: 'quantity', headerName: 'Quantity', width: 130, valueGetter: (params: any) => `${params.getValue('quantity')} ${params.getValue('measure')}`}
 ];
 
