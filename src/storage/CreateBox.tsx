@@ -2,10 +2,24 @@ import React from "react";
 import { useState } from "react";
 import { ChangeEvent } from "react";
 
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import { Storage as StorageAPI } from '../api';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      padding: theme.spacing(2),
+      color: theme.palette.text.secondary,
+      hight: "100vh",
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
+
+}));
+
 
 
 interface CreateBoxProps {
@@ -13,6 +27,8 @@ interface CreateBoxProps {
 }
 
 export default function CreateBox(props: CreateBoxProps) {
+    const classes = useStyles();
+
 	const [label, setLabel] = useState<string>("");
 	const [location, setLocation] = useState<string>("")
 
@@ -23,7 +39,7 @@ export default function CreateBox(props: CreateBoxProps) {
 	}
 	
 	return (
-		<div>
+		<div className={classes.root}>
 			<TextField
 			  id="standard-full-width"
 			  label="label"
@@ -48,7 +64,7 @@ export default function CreateBox(props: CreateBoxProps) {
 			  }}
 			  onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setLocation(event.target.value)}
 			/>
-			<Button variant="contained" color="primary" onClick={submit} >Submit</Button>
+			<Button className={classes.button} variant="contained" color="primary" onClick={submit} >Submit</Button>
 		</div>
 	);
 }
