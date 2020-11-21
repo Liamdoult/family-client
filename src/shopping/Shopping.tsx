@@ -32,11 +32,6 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const columns = [
-  { field: 'name', headerName: 'Name', width: 300 },
-  { field: 'description', headerName: 'Description', width: 300 },
-  { field: 'quantity', headerName: 'Quantity', width: 130, valueGetter: (params: any) => `${params.getValue('quantity')} ${params.getValue('measure')}`}
-];
 
 export default function Shopping() {
     const classes = useStyles();
@@ -95,7 +90,7 @@ export default function Shopping() {
                         <h1>Shopping</h1>
                         <br />
                         <br />
-                        <div style={{ height: 400, width: '100%' }}>
+                        <div style={{ width: '100%' }}>
                             <List items={items} />
                         </div>
                         <br />

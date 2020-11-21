@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import Item from './Item';
 import { ItemProp } from './Item';
@@ -21,7 +22,6 @@ const useStyles = makeStyles({
 
 interface ListProps {
     items: Array<ItemProp>,
-
 }
 
 export default function List({ items }: ListProps) { const classes = useStyles();
@@ -30,9 +30,11 @@ export default function List({ items }: ListProps) { const classes = useStyles()
             <Table className={classes.table} size="small" aria-label="a dense table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Name</TableCell>
+                        <TableCell padding="checkbox"><Checkbox/></TableCell>
+                        <TableCell >Name</TableCell>
                         <TableCell >Description</TableCell>
-                        <TableCell >Quantity</TableCell>
+                        <TableCell align="right">Quantity</TableCell>
+                        <TableCell padding="checkbox"></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
