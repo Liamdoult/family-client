@@ -21,7 +21,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import './App.css';
 
 import Storage from "./Storage";
-import Shopping from "./shopping/Shopping";
+import Shopping from "./shopping";
 
 
 const useStyles = makeStyles((theme) => ({
