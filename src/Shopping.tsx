@@ -46,11 +46,13 @@ export default function Shopping() {
     const [ itemDescription, setItemDescription ] = useState<string|undefined>(undefined);
     const [ itemQuantity, setItemQuantity ] = useState<number|undefined>(undefined);
     const [ itemMeasure, setItemMeasure ] = useState<string|undefined>(undefined);
+    const [ loading, setLoading ] = useState<boolean>(false);
 
     const [ itemNameError, setItemNameError ] = useState<boolean>(false);
     const [ itemDescriptionError, setItemDescriptionError ] = useState<boolean>(false);
     const [ itemQuantityError, setItemQuantityError ] = useState<boolean>(false);
     const [ itemMeasureError, setItemMeasureError ] = useState<boolean>(false);
+
 
     function updateItems() {
        getShopping().then((items: Array<ShoppingItem>) => {
@@ -61,6 +63,7 @@ export default function Shopping() {
     useEffect(updateItems, []);
 
     function uploadItem() {
+        setLoading(true);
         // Mark fields if invalid
         if (!itemName) setItemNameError(true);
         if (!itemQuantity) setItemQuantityError(true);
@@ -74,9 +77,11 @@ export default function Shopping() {
             description: itemDescription || "",
             quantity: itemQuantity,
             measure: itemMeasure,
-        }]);
+        }]).then(() => {
+            updateItems();
+            setLoading(false);
+        });
 
-        updateItems();
     }
 
     return (
@@ -101,6 +106,7 @@ export default function Shopping() {
                         <Button
                             variant="contained"
                             color="primary"
+                            disabled={loading}
                             className={classes.button}
                             startIcon={<CloudUploadIcon />}
                             onClick={uploadItem}
