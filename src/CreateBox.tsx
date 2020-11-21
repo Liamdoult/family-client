@@ -5,12 +5,11 @@ import { ChangeEvent } from "react";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { createBox } from "./api";
-import { Box } from "./api";
+import { Storage as StorageAPI } from './api';
 
 
 interface CreateBoxProps {
-	setBox: React.Dispatch<React.SetStateAction<Box | undefined>>
+	setBox: React.Dispatch<React.SetStateAction<StorageAPI.Box | undefined>>
 }
 
 export default function CreateBox(props: CreateBoxProps) {
@@ -20,7 +19,7 @@ export default function CreateBox(props: CreateBoxProps) {
 	const { setBox } = props;
 
 	function submit() {
-		createBox(label, location).then(setBox);
+		StorageAPI.createBox(label, location).then(setBox);
 	}
 	
 	return (

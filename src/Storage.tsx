@@ -11,10 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 
-import { Item } from './api';
-import { PartialBox } from './api';
-import { Box } from './api';
-import { getBox } from './api';
+import { Storage as StorageAPI } from './api';
 import Search from './Search';
 import CreateBox from './CreateBox';
 
@@ -38,19 +35,19 @@ export default function Storage() {
     const classes = useStyles();
 
     const [loading, setLoading] = useState<boolean>(false);
-    const [box, setBox] = useState<Box | undefined>(undefined);
-    const [item, setItem] = useState<Item | undefined>(undefined);
+    const [box, setBox] = useState<StorageAPI.Box | undefined>(undefined);
+    const [item, setItem] = useState<StorageAPI.Item | undefined>(undefined);
 
-    function handleSubmit(option: PartialBox | Item | null) {
+    function handleSubmit(option: StorageAPI.PartialBox | StorageAPI.Item | null) {
         setLoading(true);
-        if ((option as Item).name) {
+        if ((option as StorageAPI.Item).name) {
             setBox(undefined);
-            setItem(option as Item);
+            setItem(option as StorageAPI.Item);
             setLoading(false);
         }
-        if ((option as PartialBox).label) {
+        if ((option as StorageAPI.PartialBox).label) {
             setItem(undefined);
-            getBox((option as PartialBox)._id).then(box => {
+            StorageAPI.getBox((option as StorageAPI.PartialBox)._id).then(box => {
                 setBox(box);
                 setLoading(false);
             })
@@ -89,7 +86,7 @@ export default function Storage() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {box.items.map((containedItem: Item) => (
+                                    {box.items.map((containedItem: StorageAPI.Item) => (
                                         <TableRow key={containedItem._id}>
                                             <TableCell component="th" scope="row">{containedItem.name}</TableCell>
                                             <TableCell align="right">{containedItem.description}</TableCell>

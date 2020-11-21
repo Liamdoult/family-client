@@ -9,9 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from '@material-ui/core/Button'; 
 
-import { ShoppingItem } from "../api";
-import { getShopping } from "../api";
-import { createItems } from "../api";
+import { Shopping as ShoppingAPI } from '../api';
 
 import List from './List';
 
@@ -36,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Shopping() {
     const classes = useStyles();
 
-    const [ items, setItems ] = useState<Array<ShoppingItem>>([]);
+    const [ items, setItems ] = useState<Array<ShoppingAPI.Item>>([]);
 
     const [ itemName, setItemName ] = useState<string|undefined>(undefined);
     const [ itemDescription, setItemDescription ] = useState<string|undefined>(undefined);
@@ -51,8 +49,8 @@ export default function Shopping() {
 
 
     function updateItems() {
-       getShopping().then((items: Array<ShoppingItem>) => {
-        setItems(items.map((item: ShoppingItem) => {return{id: item._id, ...item}}));
+       ShoppingAPI.get().then((items: Array<ShoppingAPI.Item>) => {
+        setItems(items.map((item: ShoppingAPI.Item) => {return{id: item._id, ...item}}));
         }).catch(console.log);
     }
 
@@ -68,7 +66,7 @@ export default function Shopping() {
         // Exit if invalid
         if (!itemName || !itemQuantity || !itemMeasure) return;
 
-        createItems([{
+        ShoppingAPI.create([{
             name: itemName,
             description: itemDescription || "",
             quantity: itemQuantity,

@@ -13,9 +13,7 @@ import Grid from '@material-ui/core/Grid';
 
 
 import BoxIcon from './box.svg';
-import { Item } from './api';
-import { PartialBox } from './api';
-import { search } from './api';
+import { Storage as StorageAPI } from './api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SearchProps {
-    hook: (value: PartialBox | Item | null) => any,
+    hook: (value: StorageAPI.PartialBox | StorageAPI.Item | null) => any,
     disabled?: boolean,
 }
 
@@ -53,15 +51,15 @@ export default function Search(props: SearchProps) {
   const classes = useStyles();
   const [ value, setValue ] = useState<string>("");
   const [ loading, setLoading ] = useState<boolean>(false);
-  const [ options, setOptions ] = useState<Array<PartialBox | Item>>([]);
+  const [ options, setOptions ] = useState<Array<StorageAPI.PartialBox | StorageAPI.Item>>([]);
 
   const { hook, disabled } = props;
 
   useEffect(() => {
     if (value === "") return;
     setLoading(true);
-    search(value).then(res => {
-      let results: Array<PartialBox | Item> = [];
+    StorageAPI.search(value).then(res => {
+      let results: Array<StorageAPI.PartialBox | StorageAPI.Item> = [];
       results = results.concat(res.boxes);
       results = results.concat(res.items);
       setOptions(results);
@@ -69,18 +67,18 @@ export default function Search(props: SearchProps) {
     });
   }, [value]);
 
-  function handleChange(event: object, value: string | PartialBox | Item | null, reason: string) {
+  function handleChange(event: object, value: string | StorageAPI.PartialBox | StorageAPI.Item | null, reason: string) {
     if (reason === "select-option") {
       if (typeof(value) !== "string") {
         hook(value);
       }
     }
   }
-  function renderItem(item: Item) {
+  function renderItem(item: StorageAPI.Item) {
     return <div>{item.name}</div>;
   }
 
-  function renderBox(box: PartialBox) {
+  function renderBox(box: StorageAPI.PartialBox) {
     return (
        <Grid style={{width: "100%"}} container spacing={3}>
         <Grid item style={{width: "50px", height: "100%"}} alignContent="center"><img src={BoxIcon}></img></Grid>
@@ -103,10 +101,10 @@ export default function Search(props: SearchProps) {
       disabled={disabled}
       options={options}
       loading={loading}
-      getOptionLabel={(option: PartialBox | Item) => (option as Item).name || (option as PartialBox).label}
-      renderOption={(option: PartialBox | Item) => {
-        if ((option as Item).name) return renderItem(option as Item);
-        else return renderBox(option as PartialBox);
+      getOptionLabel={(option: StorageAPI.PartialBox | StorageAPI.Item) => (option as StorageAPI.Item).name || (option as StorageAPI.PartialBox).label}
+      renderOption={(option: StorageAPI.PartialBox | StorageAPI.Item) => {
+        if ((option as StorageAPI.Item).name) return renderItem(option as StorageAPI.Item);
+        else return renderBox(option as StorageAPI.PartialBox);
       }}
       filterOptions={(options, state) => options}
       style={{ width: "100$" }}
