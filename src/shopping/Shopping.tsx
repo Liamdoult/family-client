@@ -10,9 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from '@material-ui/core/Button'; 
 
-import { ShoppingItem } from "./api";
-import { getShopping } from "./api";
-import { createItems } from "./api";
+import { ShoppingItem } from "../api";
+import { getShopping } from "../api";
+import { createItems } from "../api";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -92,7 +92,6 @@ export default function Shopping() {
                 <Grid item xs={6}>
                     <Paper className={classes.paper}>
                         <h1>Shopping</h1>
-                        Items required at the next shopping trip.
                         <br />
                         <br />
                         <div style={{ height: 400, width: '100%' }}>
