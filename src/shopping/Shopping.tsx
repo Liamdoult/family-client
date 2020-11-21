@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 import { makeStyles } from '@material-ui/core/styles';
-import { DataGrid } from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -13,6 +12,8 @@ import Button from '@material-ui/core/Button';
 import { ShoppingItem } from "../api";
 import { getShopping } from "../api";
 import { createItems } from "../api";
+
+import List from './List';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -95,7 +96,7 @@ export default function Shopping() {
                         <br />
                         <br />
                         <div style={{ height: 400, width: '100%' }}>
-                            <DataGrid rows={items as any} columns={columns} pageSize={5} checkboxSelection />
+                            <List items={items} />
                         </div>
                         <br />
                         <TextField id="standard-basic" label="Name" error={itemNameError} onChange={event => setItemName(event.target.value)} />
