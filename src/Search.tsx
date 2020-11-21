@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 
-import BoxIcon from './box.svg';
+import BoxIcon from './assets/box.svg';
 import { Storage as StorageAPI } from './api';
 
 const useStyles = makeStyles((theme) => ({

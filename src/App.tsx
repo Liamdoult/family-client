@@ -20,7 +20,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 import './App.css';
 
-import Storage from "./Storage";
+import Storage from "./storage";
 import Shopping from "./shopping";
 
 

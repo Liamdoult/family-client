@@ -11,8 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 
-import { Storage as StorageAPI } from './api';
-import Search from './Search';
+import { Storage as StorageAPI } from '../api';
+import Search from '../Search';
 import CreateBox from './CreateBox';
 
 
