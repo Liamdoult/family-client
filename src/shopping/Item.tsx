@@ -15,16 +15,25 @@ export interface ItemProp {
 
 interface ItemProps {
     item: ItemProp,
+    deleteItem: (id: string) => void,
+    checkItem: (id: string) => void,
+    uncheckItem: (id: string) => void,
 }
 
-export default function Item({ item }: ItemProps ) {
+export default function Item({ item, deleteItem, checkItem, uncheckItem }: ItemProps ) {
+    function markChecked(isChecked: boolean) {
+        if (isChecked)
+            return checkItem(item._id);
+        return uncheckItem(item._id);
+    }
+
     return (
         <TableRow key={item._id}>
-            <TableCell padding="checkbox"><Checkbox inputProps={{ 'aria-labelledby': item._id }}/></TableCell>
+            <TableCell padding="checkbox"><Checkbox inputProps={{ 'aria-labelledby': item._id }} onChange={event => markChecked(event.target.checked)} /></TableCell>
             <TableCell style={{width: "100"}} component="th" scope="row">{item.name}</TableCell>
             <TableCell>{item.description}</TableCell>
             <TableCell align="right">{`${item.quantity} ${item.measure}`}</TableCell>
-            <TableCell padding="checkbox" align="right"><DeleteForeverIcon /></TableCell>
+            <TableCell padding="checkbox" align="right" onClick={() => deleteItem(item._id)}><DeleteForeverIcon /></TableCell>
         </TableRow>
      );
 }

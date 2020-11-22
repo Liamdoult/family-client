@@ -78,6 +78,18 @@ export default function Shopping() {
 
     }
 
+    function deleteItem(id: string) {
+        ShoppingAPI.deleted(id).then(() => setItems(items.filter(item => item._id !== id)));
+    }
+
+    function checkItem(id: string) {
+        ShoppingAPI.purchased(id).then(()=>{});
+    }
+
+    function uncheckItem(_: string) {
+        return ;
+    }
+
     return (
         <div className={classes.root}>
             <br />
@@ -89,7 +101,7 @@ export default function Shopping() {
                         <br />
                         <br />
                         <div style={{ width: '100%' }}>
-                            <List items={items} />
+                            <List items={items} deleteItem={deleteItem} checkItem={checkItem} uncheckItem={uncheckItem}/>
                         </div>
                         <br />
                         <TextField id="standard-basic" label="Name" error={itemNameError} onChange={event => setItemName(event.target.value)} />

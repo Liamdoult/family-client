@@ -46,8 +46,8 @@ export async function create(items: Array<PartialItem>) : Promise<Array<Item>> {
  *
  * @param item The item that needs to be deleted.
  */
-export async function deleted(item: Item) {
-    await fetch(`http://localhost:8080/shopping?id=${item._id}`, {
+export async function deleted(id: string) {
+    await fetch(`http://localhost:8080/shopping?id=${id}`, {
         method: "DELETE",
     });
 
@@ -58,8 +58,8 @@ export async function deleted(item: Item) {
  * 
  * @param item The item that needs to be marked.
  */
-export async function purchased(item: Item) {
-    await fetch(`http://localhost:8080/shopping?id=${item._id}&purchased`, {
+export async function purchased(id: string) {
+    await fetch(`http://localhost:8080/shopping?id=${id}&purchased`, {
         method: "PATCH",
     });
 }
