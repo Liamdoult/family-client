@@ -17,6 +17,7 @@ import Menu from '@material-ui/core/Menu';
 // import SearchIcon from '@material-ui/icons/Search';
 import InboxIcon from '@material-ui/icons/Inbox';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 
 import './App.css';
 
@@ -192,6 +193,14 @@ function App() {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+
+           <Link to="/vehicles" style={{ textDecoration: 'none' }}>
+              <IconButton aria-label="go to storage" color="inherit">
+                <Badge badgeContent={0} color="secondary">
+                  <DirectionsCarIcon style={{color: "white"}}/>
+                </Badge>
+              </IconButton>
+            </Link>
            <Link to="/shopping" style={{ textDecoration: 'none' }}>
               <IconButton aria-label="go to storage" color="inherit">
                 <Badge badgeContent={0} color="secondary">
@@ -238,6 +247,9 @@ function App() {
       {renderMobileMenu}
       {renderMenu}
       <Switch>
+        <Route path="/vehicles">
+            <>Vehicles</>
+        </Route>
         <Route path="/shopping">
             <Shopping />
         </Route>
