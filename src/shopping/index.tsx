@@ -1,4 +1,3 @@
-import Shopping from './Shopping';
+import Shopping from "./Shopping";
 
 export default Shopping;
-

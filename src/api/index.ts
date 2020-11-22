@@ -1,2 +1,2 @@
-export * as Shopping from './shopping';
-export * as Storage from './storage';
+export * as Shopping from "./shopping";
+export * as Storage from "./storage";
