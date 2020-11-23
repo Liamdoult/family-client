@@ -19,6 +19,7 @@ import InboxIcon from "@material-ui/icons/Inbox";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import DirectionsCarIcon from "@material-ui/icons/DirectionsCar";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import KitchenIcon from "@material-ui/icons/Kitchen";
 
 import "./App.css";
 
@@ -212,6 +213,13 @@ function App() {
                   </Badge>
                 </IconButton>
               </Link>
+              <Link to="/recipes" style={{ textDecoration: "none" }}>
+                <IconButton aria-label="go to storage" color="inherit">
+                  <Badge badgeContent={0} color="secondary">
+                    <KitchenIcon style={{ color: "white" }} />
+                  </Badge>
+                </IconButton>
+              </Link>
               <Link to="/storage" style={{ textDecoration: "none" }}>
                 <IconButton aria-label="go to storage" color="inherit">
                   <Badge badgeContent={0} color="secondary">
@@ -259,6 +267,9 @@ function App() {
           </Route>
           <Route path="/shopping">
             <Shopping />
+          </Route>
+          <Route path="/recipes">
+            <>Recipes</>
           </Route>
           <Route path="/storage">
             <Storage />
