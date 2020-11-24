@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import Button from "@material-ui/core/Button";
 
 import { Shopping as ShoppingAPI } from "../api";
@@ -192,10 +192,10 @@ export default function Shopping() {
               color="primary"
               disabled={loading}
               className={classes.button}
-              startIcon={<CloudUploadIcon />}
+              startIcon={<PlaylistAddIcon />}
               onClick={uploadItem}
             >
-              Upload
+              Add
             </Button>
           </Paper>
         </Grid>
