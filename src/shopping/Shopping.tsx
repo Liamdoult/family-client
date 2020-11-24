@@ -136,6 +136,9 @@ export default function Shopping() {
               error={itemNameError}
               value={itemName}
               onChange={(event) => setItemName(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") uploadItem();
+              }}
             />
             <TextField
               id="standard-basic"
@@ -150,6 +153,9 @@ export default function Shopping() {
               error={itemQuantityError}
               value={itemQuantity}
               onChange={(event) => setItemQuantity(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") uploadItem();
+              }}
             />
             <TextField
               id="standard-basic"
@@ -157,6 +163,9 @@ export default function Shopping() {
               error={itemMeasureError}
               value={itemMeasure}
               onChange={(event) => setItemMeasure(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") uploadItem();
+              }}
             />
             <Button
               variant="contained"
