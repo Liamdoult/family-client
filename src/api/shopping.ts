@@ -61,3 +61,14 @@ export async function purchased(id: string) {
     method: "PATCH",
   });
 }
+
+/**
+ * Mark item as not purchased.
+ *
+ * @param id Identifier of item that needs to be marked.
+ */
+export async function unpurchased(id: string) {
+  await fetch(`http://localhost:8080/shopping?id=${id}&unpurchased=true`, {
+    method: "PATCH",
+  });
+}

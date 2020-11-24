@@ -122,11 +122,13 @@ export default function Shopping() {
   }
 
   function uncheckItem(id: string) {
-    setItems(
-      items.map((item) => {
-        if (item._id !== id) return item;
-        return { ...item, checked: false };
-      })
+    ShoppingAPI.unpurchased(id).then(() =>
+      setItems(
+        items.map((item) => {
+          if (item._id !== id) return item;
+          return { ...item, checked: false };
+        })
+      )
     );
   }
 
