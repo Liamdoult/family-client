@@ -56,7 +56,7 @@ export async function deleted(id: string) {
  * @param item The item that needs to be marked.
  */
 export async function purchased(id: string) {
-  await fetch(`http://localhost:8080/shopping?id=${id}&purchased`, {
+  await fetch(`http://localhost:8080/shopping?id=${id}&purchased=true`, {
     method: "PATCH",
   });
 }
