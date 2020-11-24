@@ -11,6 +11,7 @@ export interface ItemProp {
   description: string;
   quantity: number;
   measure: string;
+  checked?: boolean;
 }
 
 interface ItemProps {
@@ -32,18 +33,28 @@ export default function Item({
   }
 
   return (
-    <TableRow key={item._id}>
+    <TableRow
+      key={item._id}
+      style={item.checked ? { backgroundColor: "#ededed" } : {}}
+    >
       <TableCell padding="checkbox">
         <Checkbox
           inputProps={{ "aria-labelledby": item._id }}
           onChange={(event) => markChecked(event.target.checked)}
+          checked={item.checked}
         />
       </TableCell>
       <TableCell style={{ width: "100" }} component="th" scope="row">
         {item.name}
       </TableCell>
       <TableCell>{item.description}</TableCell>
-      <TableCell align="right">{`${item.quantity} ${item.measure}`}</TableCell>
+      <TableCell align="right">
+        {item.checked ? (
+          <s>{`${item.quantity} ${item.measure}`}</s>
+        ) : (
+          <>{`${item.quantity} ${item.measure}`}</>
+        )}
+      </TableCell>
       <TableCell
         padding="checkbox"
         align="right"

@@ -11,6 +11,7 @@ export interface Item extends PartialItem {
   created: Date;
   purchased?: Date;
   deleted?: Date;
+  checked?: boolean;
 }
 
 /**

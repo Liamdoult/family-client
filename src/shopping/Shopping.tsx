@@ -111,11 +111,23 @@ export default function Shopping() {
   }
 
   function checkItem(id: string) {
-    ShoppingAPI.purchased(id).then(() => {});
+    ShoppingAPI.purchased(id).then(() => {
+      const moved = items
+        .filter((item) => item._id === id)
+        .map((item) => {
+          return { ...item, checked: true };
+        });
+      setItems(items.filter((item) => item._id !== id).concat(moved));
+    });
   }
 
-  function uncheckItem(_: string) {
-    return;
+  function uncheckItem(id: string) {
+    setItems(
+      items.map((item) => {
+        if (item._id !== id) return item;
+        return { ...item, checked: false };
+      })
+    );
   }
 
   return (
