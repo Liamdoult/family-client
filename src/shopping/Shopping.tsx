@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Shopping() {
   const classes = useStyles();
 
+  const itemNameInput = useRef<HTMLInputElement | null>(null);
   const [items, setItems] = useState<Array<ShoppingAPI.Item>>([]);
 
   const [itemName, setItemName] = useState<string>("");
@@ -72,7 +74,10 @@ export default function Shopping() {
     if (!itemMeasure) setItemMeasureError(true);
 
     // Exit if invalid
-    if (!itemName || !itemMeasure || !quantity) return setLoading(false);
+    if (!itemName || !itemMeasure || !quantity) {
+      if (itemNameInput && itemNameInput.current) itemNameInput.current.focus();
+      return setLoading(false);
+    }
 
     ShoppingAPI.create([
       {
@@ -94,6 +99,8 @@ export default function Shopping() {
       setItemMeasureError(false);
 
       setLoading(false);
+
+      if (itemNameInput && itemNameInput.current) itemNameInput.current.focus();
     });
   }
 
@@ -135,6 +142,7 @@ export default function Shopping() {
               label="Name"
               error={itemNameError}
               value={itemName}
+              inputRef={itemNameInput}
               onChange={(event) => setItemName(event.target.value)}
               onKeyPress={(event) => {
                 if (event.key === "Enter") uploadItem();
