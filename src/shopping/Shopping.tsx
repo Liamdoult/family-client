@@ -35,14 +35,10 @@ export default function Shopping() {
 
   const [items, setItems] = useState<Array<ShoppingAPI.Item>>([]);
 
-  const [itemName, setItemName] = useState<string | undefined>(undefined);
-  const [itemDescription, setItemDescription] = useState<string | undefined>(
-    undefined
-  );
-  const [itemQuantity, setItemQuantity] = useState<number | undefined>(
-    undefined
-  );
-  const [itemMeasure, setItemMeasure] = useState<string | undefined>(undefined);
+  const [itemName, setItemName] = useState<string>("");
+  const [itemDescription, setItemDescription] = useState<string>("");
+  const [itemQuantity, setItemQuantity] = useState<string>("");
+  const [itemMeasure, setItemMeasure] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const [itemNameError, setItemNameError] = useState<boolean>(false);
@@ -68,23 +64,35 @@ export default function Shopping() {
 
   function uploadItem() {
     setLoading(true);
+    const quantity = parseInt(itemQuantity);
+
     // Mark fields if invalid
     if (!itemName) setItemNameError(true);
-    if (!itemQuantity) setItemQuantityError(true);
+    if (!quantity) setItemQuantityError(true);
     if (!itemMeasure) setItemMeasureError(true);
 
     // Exit if invalid
-    if (!itemName || !itemQuantity || !itemMeasure) return;
+    if (!itemName || !itemMeasure || !quantity) return setLoading(false);
 
     ShoppingAPI.create([
       {
         name: itemName,
         description: itemDescription || "",
-        quantity: itemQuantity,
+        quantity: quantity,
         measure: itemMeasure,
       },
     ]).then(() => {
       updateItems();
+      setItemName("");
+      setItemDescription("");
+      setItemQuantity("");
+      setItemMeasure("");
+
+      setItemNameError(false);
+      setItemDescriptionError(false);
+      setItemQuantityError(false);
+      setItemMeasureError(false);
+
       setLoading(false);
     });
   }
@@ -126,26 +134,28 @@ export default function Shopping() {
               id="standard-basic"
               label="Name"
               error={itemNameError}
+              value={itemName}
               onChange={(event) => setItemName(event.target.value)}
             />
             <TextField
               id="standard-basic"
               label="Description"
               error={itemDescriptionError}
+              value={itemDescription}
               onChange={(event) => setItemDescription(event.target.value)}
             />
             <TextField
               id="standard-basic"
               label="Quantity"
               error={itemQuantityError}
-              onChange={(event) =>
-                setItemQuantity(parseInt(event.target.value))
-              }
+              value={itemQuantity}
+              onChange={(event) => setItemQuantity(event.target.value)}
             />
             <TextField
               id="standard-basic"
               label="Measure"
               error={itemMeasureError}
+              value={itemMeasure}
               onChange={(event) => setItemMeasure(event.target.value)}
             />
             <Button
