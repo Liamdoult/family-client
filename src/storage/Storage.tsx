@@ -6,11 +6,11 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 import ResultsPage from './ResultsPage';
-import { Box } from './ResultsPage';
-import { Item } from './ResultsPage';
+import { Box } from '../api/storage';
+import { Item } from '../api/storage';
 import CreateSearchPage from './CreateSearchPage';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
     },
@@ -24,6 +24,10 @@ export default function Storage() {
 
     const [result, setResult] = useState<Box | Item | undefined>(undefined);
 
+    function handleSetResult(result: Box | Item) {
+        setResult(result);
+    }
+
     return (
         <div className={classes.root}>
             <br />
@@ -34,7 +38,7 @@ export default function Storage() {
                         {result ? (
                             <ResultsPage result={result} />
                         ) : (
-                            <CreateSearchPage />
+                            <CreateSearchPage setResult={handleSetResult} />
                         )}
                     </Paper>
                 </Grid>

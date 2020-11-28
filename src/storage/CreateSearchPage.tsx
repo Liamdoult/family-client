@@ -5,35 +5,35 @@ import { Storage as StorageAPI } from '../api';
 import Search from '../Search';
 import CreateBox from './CreateBox';
 
-export default function CreateSearchPage() {
+interface Props {
+    setResult: (result: StorageAPI.Box | StorageAPI.Item) => void;
+}
+
+export default function CreateSearchPage({ setResult }: Props) {
     const [loading, setLoading] = useState<boolean>(false);
-    const [box, setBox] = useState<StorageAPI.Box | undefined>(undefined);
-    const [item, setItem] = useState<StorageAPI.Item | undefined>(undefined);
 
     function handleSubmit(
         option: StorageAPI.PartialBox | StorageAPI.Item | null
     ) {
+        if (option === null) return;
+
         setLoading(true);
-        if ((option as StorageAPI.Item).name) {
-            setBox(undefined);
-            setItem(option as StorageAPI.Item);
+        if (option.type !== StorageAPI.BaseObjectType.PARTIALBOX) {
+            setResult(option as StorageAPI.Item);
             setLoading(false);
+            return;
         }
-        if ((option as StorageAPI.PartialBox).label) {
-            setItem(undefined);
-            StorageAPI.getBox((option as StorageAPI.PartialBox)._id).then(
-                (box) => {
-                    setBox(box);
-                    setLoading(false);
-                }
-            );
-        }
+
+        StorageAPI.getBox(option._id).then((result) => {
+            setResult(result);
+            setLoading(false);
+        });
     }
 
     return (
         <>
             <Search hook={handleSubmit} disabled={loading}></Search>
-            <CreateBox setBox={setBox} />
+            <CreateBox setBox={setResult} />
         </>
     );
 }

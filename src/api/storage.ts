@@ -1,5 +1,16 @@
-export interface Item {
+export enum BaseObjectType {
+    ITEM,
+    BOX,
+    PARTIALITEM,
+    PARTIALBOX,
+}
+
+interface BaseObject {
     _id: string;
+    type: BaseObjectType;
+}
+
+export interface Item extends BaseObject {
     name: string;
     description: string;
     owner: string | undefined;
@@ -7,27 +18,23 @@ export interface Item {
     created: string;
 }
 
+interface _Box extends BaseObject {
+    label: string;
+    location: string;
+    created: string;
+    updated: string[];
+}
 /**
  * Reduced size version of Box.
  *
  * To reduce data size, items are only id references. If items need to be Item use `Box`.
  */
-export interface PartialBox {
-    _id: string;
-    label: string;
+export interface PartialBox extends _Box {
     items: string[];
-    location: string;
-    created: string;
-    updated: string[];
 }
 
-export interface Box {
-    _id: string;
-    label: string;
+export interface Box extends _Box {
     items: Item[];
-    location: string;
-    created: string;
-    updated: string[];
 }
 
 /**
@@ -41,11 +48,21 @@ export async function search(
     const res = await fetch(
         `http://localhost:8080/storage/search?term=${term}`
     );
-    return (await res.json()) as {
+    const jsn = await res.json();
+    return {
+        boxes: jsn.boxes.map(
+            (value: any) =>
+                new Object({ type: BaseObjectType.PARTIALBOX, ...value })
+        ),
+        items: jsn.boxes.map(
+            (value: any) => new Object({ type: BaseObjectType.ITEM, ...value })
+        ),
+    } as {
         boxes: Array<PartialBox>;
         items: Array<Item>;
     };
 }
+
 /**
  * Get a box by its identifier.
  *
@@ -54,7 +71,7 @@ export async function search(
 export async function getBox(id: string): Promise<Box> {
     const res = await fetch(`http://localhost:8080/storage/box?id=${id}`);
     const json = await res.json();
-    return json as Box;
+    return { type: BaseObjectType.BOX, ...json } as Box;
 }
 
 /**
@@ -72,5 +89,5 @@ export async function createBox(label: string, location: string): Promise<Box> {
         body: JSON.stringify({ location, label }),
     });
     const json = await res.json();
-    return json as Box;
+    return { type: BaseObjectType.BOX, ...json } as Box;
 }

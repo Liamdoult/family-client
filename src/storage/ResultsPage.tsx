@@ -11,7 +11,7 @@ import TableBody from '@material-ui/core/TableBody';
 
 import { Storage as StorageAPI } from '../api';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
     },
@@ -20,40 +20,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-enum Type {
-    Box,
-    Item,
-}
-
-export interface Box {
-    _id: string;
-    label: string;
-    items: Item[];
-    location: string;
-    created: string;
-    updated: string[];
-    type: Type;
-}
-
-export interface Item {
-    _id: string;
-    name: string;
-    description: string;
-    owner: string | undefined;
-    quantity: Number | undefined;
-    created: string;
-    type: Type;
-}
-
 interface ResultsPageProps {
-    result: Box | Item;
+    result: StorageAPI.Box | StorageAPI.Item;
 }
 
-function ItemResult({ item }: { item: Item }) {
+function ItemResult({ item }: { item: StorageAPI.Item }) {
     return <>{item ? <div>{item._id}</div> : <></>}</>;
 }
 
-function BoxResult({ box }: { box: Box }) {
+function BoxResult({ box }: { box: StorageAPI.Box }) {
     const classes = useStyles();
 
     return (
@@ -105,7 +80,9 @@ function BoxResult({ box }: { box: Box }) {
 }
 
 export default function ResultsPage({ result }: ResultsPageProps) {
-    if (result.type === Type.Box) return <BoxResult box={result as Box} />;
-    if (result.type === Type.Item) return <ItemResult item={result as Item} />;
+    if (result.type === StorageAPI.BaseObjectType.BOX)
+        return <BoxResult box={result as StorageAPI.Box} />;
+    if (result.type === StorageAPI.BaseObjectType.ITEM)
+        return <ItemResult item={result as StorageAPI.Item} />;
     return <div>ERROR: ITEM TYPE NOT FOUND</div>;
 }

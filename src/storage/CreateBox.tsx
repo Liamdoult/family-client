@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface CreateBoxProps {
-    setBox: React.Dispatch<React.SetStateAction<StorageAPI.Box | undefined>>;
+    setBox: (box: StorageAPI.Box) => void;
 }
 
 export default function CreateBox(props: CreateBoxProps) {
