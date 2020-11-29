@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(2),
         color: theme.palette.text.secondary,
-        hight: '100vh',
     },
     button: {
         margin: theme.spacing(1),

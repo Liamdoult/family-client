@@ -1,19 +1,16 @@
 import React from 'react';
+import { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
 
 import { Storage as StorageAPI } from '../api';
+import List from './List';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        padding: theme.spacing(2),
+        color: theme.palette.text.secondary,
     },
     table: {
         minWidth: 650,
@@ -31,8 +28,12 @@ function ItemResult({ item }: { item: StorageAPI.Item }) {
 function BoxResult({ box }: { box: StorageAPI.Box }) {
     const classes = useStyles();
 
+    const [items, setItems] = useState<StorageAPI.Item[]>(box.items);
+
+    function deleteItem(id: string) {}
+
     return (
-        <>
+        <div className={classes.root}>
             {box._id}
             <br />
             {box.label}
@@ -41,41 +42,9 @@ function BoxResult({ box }: { box: StorageAPI.Box }) {
             <br />
             {box.created}
             <br />
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow key="heading">
-                            <TableCell>Name</TableCell>
-                            <TableCell align="right">Description</TableCell>
-                            <TableCell align="right">Created</TableCell>
-                            <TableCell align="right">Owner</TableCell>
-                            <TableCell align="right">Quantity</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {box.items.map((containedItem: StorageAPI.Item) => (
-                            <TableRow key={containedItem._id}>
-                                <TableCell component="th" scope="row">
-                                    {containedItem.name}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {containedItem.description}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {containedItem.created}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {containedItem.owner || ''}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {containedItem.quantity || 1}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </>
+            <br />
+            <List items={items} deleteItem={deleteItem} />
+        </div>
     );
 }
 
