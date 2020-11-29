@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Storage as StorageAPI } from '../api';
 import List from './List';
+import AddItem from './AddItem';
+import { UnregisteredItem } from './AddItem';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +34,17 @@ function BoxResult({ box }: { box: StorageAPI.Box }) {
 
     function deleteItem(id: string) {}
 
+    async function addItem(item: UnregisteredItem) {
+        try {
+            const _box = await StorageAPI.updateBox(box._id, [item]);
+            setItems(_box.items);
+            return true;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
+
     return (
         <div className={classes.root}>
             {box._id}
@@ -44,6 +57,7 @@ function BoxResult({ box }: { box: StorageAPI.Box }) {
             <br />
             <br />
             <List items={items} deleteItem={deleteItem} />
+            <AddItem addItem={addItem} />
         </div>
     );
 }

@@ -18,6 +18,13 @@ export interface Item extends BaseObject {
     created: string;
 }
 
+export interface UnregisteredItem {
+    name: string;
+    description: string;
+    owner: string | undefined;
+    quantity: Number | undefined;
+}
+
 interface _Box extends BaseObject {
     label: string;
     location: string;
@@ -87,6 +94,21 @@ export async function createBox(label: string, location: string): Promise<Box> {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ location, label }),
+    });
+    const json = await res.json();
+    return { type: BaseObjectType.BOX, ...json } as Box;
+}
+
+export async function updateBox(
+    boxId: string,
+    items: Array<UnregisteredItem>
+): Promise<Box> {
+    const res = await fetch(`http://localhost:8080/storage/box`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ boxId, items }),
     });
     const json = await res.json();
     return { type: BaseObjectType.BOX, ...json } as Box;

@@ -19,7 +19,7 @@ export default function Row({ item, deleteItem }: ItemProps) {
             </TableCell>
             <TableCell>{item.description}</TableCell>
             <TableCell>{item.created}</TableCell>
-            <TableCell>{item.owner}</TableCell>
+            <TableCell>{item.owner || 'Shared'}</TableCell>
             <TableCell>{item.quantity}</TableCell>
             <TableCell
                 padding="checkbox"
