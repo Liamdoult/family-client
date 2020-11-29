@@ -113,3 +113,23 @@ export async function updateBox(
     const json = await res.json();
     return { type: BaseObjectType.BOX, ...json } as Box;
 }
+
+export async function removeItems(
+    boxId: string,
+    items: Array<string>
+): Promise<Box> {
+    try {
+        const res = await fetch(`http://localhost:8080/storage/box/items`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ boxId, items }),
+        });
+        const json = await res.json();
+        return { type: BaseObjectType.BOX, ...json } as Box;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}

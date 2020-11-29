@@ -32,7 +32,11 @@ function BoxResult({ box }: { box: StorageAPI.Box }) {
 
     const [items, setItems] = useState<StorageAPI.Item[]>(box.items);
 
-    function deleteItem(id: string) {}
+    function deleteItem(id: string) {
+        StorageAPI.removeItems(box._id, [id]).then((updatedBox) =>
+            setItems(updatedBox.items)
+        );
+    }
 
     async function addItem(item: UnregisteredItem) {
         try {
