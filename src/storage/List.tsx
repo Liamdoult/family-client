@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import Row from './Item';
-import { Item } from '../api/storage';
+import { Item } from '../lib/storage';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ListProps {
-    items: Array<Item>;
+    items: Array<Item.Registered>;
     deleteItem: (id: string) => void;
 }
 

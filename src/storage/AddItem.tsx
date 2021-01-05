@@ -2,20 +2,14 @@ import React from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
 
+import { Item } from '../lib/storage';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import Button from '@material-ui/core/Button';
 
-export interface UnregisteredItem {
-    name: string;
-    description: string;
-    owner: string | undefined;
-    quantity: Number | undefined;
-}
-
 interface Props {
-    addItem: (item: UnregisteredItem) => Promise<boolean>;
+    addItem: (item: Item.Base) => Promise<boolean>;
 }
 
 const useStyles = makeStyles((theme) => ({

@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 import BoxIcon from './assets/box.svg';
+import { Box } from './lib/storage';
+import { Item } from './lib/storage';
 import { Storage as StorageAPI } from './api';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SearchProps {
-    hook: (value: StorageAPI.PartialBox | StorageAPI.Item | null) => any;
+    hook: (value: Box.Registered | Item.Registered | null) => any;
     disabled?: boolean;
 }
 
@@ -51,7 +53,7 @@ export default function Search(props: SearchProps) {
     const [value, setValue] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<
-        Array<StorageAPI.PartialBox | StorageAPI.Item>
+        Array<Box.Registered | Item.Registered>
     >([]);
 
     const { hook, disabled } = props;
@@ -60,7 +62,7 @@ export default function Search(props: SearchProps) {
         if (value === '') return;
         setLoading(true);
         StorageAPI.search(value).then((res) => {
-            let results: Array<StorageAPI.PartialBox | StorageAPI.Item> = [];
+            let results: Array<Box.Registered | Item.Registered> = [];
             results = results.concat(res.boxes);
             results = results.concat(res.items);
             setOptions(results);
@@ -70,7 +72,7 @@ export default function Search(props: SearchProps) {
 
     function handleChange(
         event: object,
-        value: string | StorageAPI.PartialBox | StorageAPI.Item | null,
+        value: string | Box.Registered | Item.Registered | null,
         reason: string
     ) {
         if (reason === 'select-option') {
@@ -79,11 +81,11 @@ export default function Search(props: SearchProps) {
             }
         }
     }
-    function renderItem(item: StorageAPI.Item) {
+    function renderItem(item: Item.Registered) {
         return <div>{item.name}</div>;
     }
 
-    function renderBox(box: StorageAPI.PartialBox) {
+    function renderBox(box: Box.Registered) {
         return (
             <Grid style={{ width: '100%' }} container spacing={3}>
                 <Grid
@@ -118,14 +120,14 @@ export default function Search(props: SearchProps) {
             disabled={disabled}
             options={options}
             loading={loading}
-            getOptionLabel={(option: StorageAPI.PartialBox | StorageAPI.Item) =>
-                (option as StorageAPI.Item).name ||
-                (option as StorageAPI.PartialBox).label
+            getOptionLabel={(option: Box.Registered | Item.Registered) =>
+                (option as Item.Registered).name ||
+                (option as Box.Registered).label
             }
-            renderOption={(option: StorageAPI.PartialBox | StorageAPI.Item) => {
-                if ((option as StorageAPI.Item).name)
-                    return renderItem(option as StorageAPI.Item);
-                else return renderBox(option as StorageAPI.PartialBox);
+            renderOption={(option: Box.Registered | Item.Registered) => {
+                if ((option as Item.Registered).name)
+                    return renderItem(option as Item.Registered);
+                else return renderBox(option as Box.Registered);
             }}
             filterOptions={(options, state) => options}
             style={{ width: '100$' }}

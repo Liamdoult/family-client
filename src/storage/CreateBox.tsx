@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { Storage as StorageAPI } from '../api';
+import { Box } from '../lib/storage';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface CreateBoxProps {
-    setBox: (box: StorageAPI.Box) => void;
+    setBox: (box: Box.Registered) => void;
 }
 
 export default function CreateBox(props: CreateBoxProps) {
@@ -31,7 +31,7 @@ export default function CreateBox(props: CreateBoxProps) {
     const { setBox } = props;
 
     function submit() {
-        StorageAPI.createBox(label, location).then(setBox);
+        Box.register({ label, location }, []).then(setBox);
     }
 
     return (

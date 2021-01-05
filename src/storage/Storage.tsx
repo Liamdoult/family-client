@@ -6,8 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 import ResultsPage from './ResultsPage';
-import { Box } from '../api/storage';
-import { Item } from '../api/storage';
+import { Box } from '../lib/storage';
+import { Item } from '../lib/storage';
 import CreateSearchPage from './CreateSearchPage';
 
 const useStyles = makeStyles(() => ({
@@ -22,9 +22,11 @@ const useStyles = makeStyles(() => ({
 export default function Storage() {
     const classes = useStyles();
 
-    const [result, setResult] = useState<Box | Item | undefined>(undefined);
+    const [result, setResult] = useState<
+        Box.Registered | Item.Registered | undefined
+    >(undefined);
 
-    function handleSetResult(result: Box | Item) {
+    function handleSetResult(result: Box.Registered | Item.Registered) {
         setResult(result);
     }
 

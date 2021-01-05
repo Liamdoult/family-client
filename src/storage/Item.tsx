@@ -4,10 +4,10 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-import { Item } from '../api/storage';
+import { Item } from '../lib/storage';
 
 interface ItemProps {
-    item: Item;
+    item: Item.Registered;
     deleteItem: (id: string) => void;
 }
 

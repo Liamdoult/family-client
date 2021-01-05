@@ -3,10 +3,10 @@ import { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Storage as StorageAPI } from '../api';
+import { Box } from '../lib/storage';
+import { Item } from '../lib/storage';
 import List from './List';
 import AddItem from './AddItem';
-import { UnregisteredItem } from './AddItem';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,28 +20,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ResultsPageProps {
-    result: StorageAPI.Box | StorageAPI.Item;
+    result: Box.Registered | Item.Registered;
 }
 
-function ItemResult({ item }: { item: StorageAPI.Item }) {
+function ItemResult({ item }: { item: Item.Registered }) {
     return <>{item ? <div>{item._id}</div> : <></>}</>;
 }
 
-function BoxResult({ box }: { box: StorageAPI.Box }) {
+function BoxResult({ box }: { box: Box.Registered }) {
     const classes = useStyles();
 
-    const [items, setItems] = useState<StorageAPI.Item[]>(box.items);
+    const [items, setItems] = useState<Item.Registered[]>(box.items);
 
     function deleteItem(id: string) {
-        StorageAPI.removeItems(box._id, [id]).then((updatedBox) =>
+        /*StorageAPI.removeItems(box._id, [id]).then((updatedBox) =>
             setItems(updatedBox.items)
-        );
+        );*/
     }
 
-    async function addItem(item: UnregisteredItem) {
+    async function addItem(item: Item.Base) {
         try {
-            const _box = await StorageAPI.updateBox(box._id, [item]);
-            setItems(_box.items);
+            await box.addItem(item);
+            setItems(box.items);
             return true;
         } catch (err) {
             console.log(err);
@@ -67,9 +67,9 @@ function BoxResult({ box }: { box: StorageAPI.Box }) {
 }
 
 export default function ResultsPage({ result }: ResultsPageProps) {
-    if (result.type === StorageAPI.BaseObjectType.BOX)
-        return <BoxResult box={result as StorageAPI.Box} />;
-    if (result.type === StorageAPI.BaseObjectType.ITEM)
-        return <ItemResult item={result as StorageAPI.Item} />;
+    if ((result as Box.Registered).label)
+        return <BoxResult box={result as Box.Registered} />;
+    if ((result as Item.Registered).name)
+        return <ItemResult item={result as Item.Registered} />;
     return <div>ERROR: ITEM TYPE NOT FOUND</div>;
 }
