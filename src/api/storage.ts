@@ -1,3 +1,5 @@
+import { Box } from '../lib/storage';
+
 export enum BaseObjectType {
     ITEM,
     BOX,

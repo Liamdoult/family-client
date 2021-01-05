@@ -1,0 +1,3 @@
+[submodule "family-server"]
+	path = family-server
+	url = git@github.com:Liamdoult/family-server.git
