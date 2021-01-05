@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm configure`
+
+This needs to be run everytime the common code is changed (`family-server/src/lib`)
+
 ### `npm start`
 
 Runs the app in the development mode.\
