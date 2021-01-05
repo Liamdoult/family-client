@@ -13,45 +13,41 @@ import Row from './Item';
 import { Item } from '../lib/storage';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        color: theme.palette.text.secondary,
-    },
-    table: {
-        minWidth: 650,
-    },
+  root: {
+    color: theme.palette.text.secondary,
+  },
+  table: {
+    minWidth: 650,
+  },
 }));
 
 interface ListProps {
-    items: Array<Item.Registered>;
-    deleteItem: (id: string) => void;
+  items: Array<Item.Registered>;
+  deleteItem: (id: string) => void;
 }
 
 export default function List({ items, deleteItem }: ListProps) {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <TableContainer className={classes.root} component={Paper}>
-            <Table
-                className={classes.table}
-                size="small"
-                aria-label="a dense table"
-            >
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Created</TableCell>
-                        <TableCell>Owner</TableCell>
-                        <TableCell align="right">Quantity</TableCell>
-                        <TableCell padding="checkbox"></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {items.map((item) => (
-                        <Row item={item} deleteItem={deleteItem} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
+  return (
+    <TableContainer className={classes.root} component={Paper}>
+      <Table className={classes.table} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Created</TableCell>
+            <TableCell>Owner</TableCell>
+            <TableCell align="right">Quantity</TableCell>
+            <TableCell padding="checkbox"></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {items.map((item) => (
+            <Row item={item} deleteItem={deleteItem} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }

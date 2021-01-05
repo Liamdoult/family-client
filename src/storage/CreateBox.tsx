@@ -9,69 +9,69 @@ import Button from '@material-ui/core/Button';
 import { Box } from '../lib/storage';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-        color: theme.palette.text.secondary,
-    },
-    button: {
-        margin: theme.spacing(1),
-    },
+  root: {
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
 
 interface CreateBoxProps {
-    setBox: (box: Box.Registered) => void;
+  setBox: (box: Box.Registered) => void;
 }
 
 export default function CreateBox(props: CreateBoxProps) {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const [label, setLabel] = useState<string>('');
-    const [location, setLocation] = useState<string>('');
+  const [label, setLabel] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
 
-    const { setBox } = props;
+  const { setBox } = props;
 
-    function submit() {
-        Box.register({ label, location }, []).then(setBox);
-    }
+  function submit() {
+    Box.register({ label, location }, []).then(setBox);
+  }
 
-    return (
-        <div className={classes.root}>
-            <TextField
-                id="standard-full-width"
-                label="label"
-                style={{ margin: 8 }}
-                placeholder=""
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                onChange={(
-                    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-                ) => setLabel(event.target.value)}
-            />
-            <TextField
-                id="standard-full-width"
-                label="location"
-                style={{ margin: 8 }}
-                placeholder=""
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                onChange={(
-                    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-                ) => setLocation(event.target.value)}
-            />
-            <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={submit}
-            >
-                Submit
-            </Button>
-        </div>
-    );
+  return (
+    <div className={classes.root}>
+      <TextField
+        id="standard-full-width"
+        label="label"
+        style={{ margin: 8 }}
+        placeholder=""
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onChange={(
+          event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => setLabel(event.target.value)}
+      />
+      <TextField
+        id="standard-full-width"
+        label="location"
+        style={{ margin: 8 }}
+        placeholder=""
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onChange={(
+          event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => setLocation(event.target.value)}
+      />
+      <Button
+        className={classes.button}
+        variant="contained"
+        color="primary"
+        onClick={submit}
+      >
+        Submit
+      </Button>
+    </div>
+  );
 }

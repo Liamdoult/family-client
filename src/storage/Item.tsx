@@ -7,27 +7,27 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Item } from '../lib/storage';
 
 interface ItemProps {
-    item: Item.Registered;
-    deleteItem: (id: string) => void;
+  item: Item.Registered;
+  deleteItem: (id: string) => void;
 }
 
 export default function Row({ item, deleteItem }: ItemProps) {
-    return (
-        <TableRow key={item._id}>
-            <TableCell style={{ width: '100' }} component="th" scope="row">
-                {item.name}
-            </TableCell>
-            <TableCell>{item.description}</TableCell>
-            <TableCell>{item.created}</TableCell>
-            <TableCell>{item.owner || 'Shared'}</TableCell>
-            <TableCell>{item.quantity}</TableCell>
-            <TableCell
-                padding="checkbox"
-                align="right"
-                onClick={() => deleteItem(item._id)}
-            >
-                <DeleteForeverIcon />
-            </TableCell>
-        </TableRow>
-    );
+  return (
+    <TableRow key={item._id}>
+      <TableCell style={{ width: '100' }} component="th" scope="row">
+        {item.name}
+      </TableCell>
+      <TableCell>{item.description}</TableCell>
+      <TableCell>{item.created}</TableCell>
+      <TableCell>{item.owner || 'Shared'}</TableCell>
+      <TableCell>{item.quantity}</TableCell>
+      <TableCell
+        padding="checkbox"
+        align="right"
+        onClick={() => deleteItem(item._id)}
+      >
+        <DeleteForeverIcon />
+      </TableCell>
+    </TableRow>
+  );
 }

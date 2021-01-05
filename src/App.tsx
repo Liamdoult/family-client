@@ -27,132 +27,132 @@ import Storage from './storage';
 import Shopping from './shopping';
 
 const useStyles = makeStyles((theme) => ({
-    grow: {
-        flexGrow: 1,
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    title: {
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
     },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginRight: theme.spacing(2),
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(3),
-            width: 'auto',
-        },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
     },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
     },
-    inputRoot: {
-        color: 'inherit',
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
     },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
-    },
-    sectionDesktop: {
-        display: 'none',
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
-    },
-    sectionMobile: {
-        display: 'flex',
-        [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
-    },
+  },
 }));
 
 function App() {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const handleProfileMenuOpen = (event: any) => {
-        setAnchorEl(event.currentTarget);
-    };
+  const handleProfileMenuOpen = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
 
-    const handleMobileMenuOpen = (event: any) => {
-        setMobileMoreAnchorEl(event.currentTarget);
-    };
+  const handleMobileMenuOpen = (event: any) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
 
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        </Menu>
-    );
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+    </Menu>
+  );
 
-    const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
-        <Menu
-            anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            id={mobileMenuId}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <MenuItem>
-                <Link to="/storage" style={{ textDecoration: 'none' }}>
-                    <IconButton aria-label="go to storage" color="inherit">
-                        <Badge badgeContent={0} color="secondary">
-                            <InboxIcon style={{ color: 'white' }} />
-                        </Badge>
-                    </IconButton>
-                    <p>Messages</p>
-                </Link>
-            </MenuItem>
-            {/* <MenuItem>
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem>
+        <Link to="/storage" style={{ textDecoration: 'none' }}>
+          <IconButton aria-label="go to storage" color="inherit">
+            <Badge badgeContent={0} color="secondary">
+              <InboxIcon style={{ color: 'white' }} />
+            </Badge>
+          </IconButton>
+          <p>Messages</p>
+        </Link>
+      </MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
           <Badge badgeContent={11} color="secondary">
             <NotificationsIcon />
@@ -171,15 +171,15 @@ function App() {
         </IconButton>
         <p>Profile</p>
       </MenuItem> */}
-        </Menu>
-    );
+    </Menu>
+  );
 
-    return (
-        <Router>
-            <div className={classes.grow}>
-                <AppBar position="static">
-                    <Toolbar>
-                        {/* <IconButton
+  return (
+    <Router>
+      <div className={classes.grow}>
+        <AppBar position="static">
+          <Toolbar>
+            {/* <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -187,89 +187,47 @@ function App() {
           >
             <MenuIcon />
           </IconButton> */}
-                        <Typography
-                            className={classes.title}
-                            variant="h6"
-                            noWrap
-                        >
-                            My Family
-                        </Typography>
-                        <div className={classes.grow} />
-                        <div className={classes.sectionDesktop}>
-                            <Link
-                                to="/banking"
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <IconButton
-                                    aria-label="go to storage"
-                                    color="inherit"
-                                >
-                                    <Badge badgeContent={0} color="secondary">
-                                        <AccountBalanceIcon
-                                            style={{ color: 'white' }}
-                                        />
-                                    </Badge>
-                                </IconButton>
-                            </Link>
-                            <Link
-                                to="/vehicles"
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <IconButton
-                                    aria-label="go to storage"
-                                    color="inherit"
-                                >
-                                    <Badge badgeContent={0} color="secondary">
-                                        <DirectionsCarIcon
-                                            style={{ color: 'white' }}
-                                        />
-                                    </Badge>
-                                </IconButton>
-                            </Link>
-                            <Link
-                                to="/shopping"
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <IconButton
-                                    aria-label="go to storage"
-                                    color="inherit"
-                                >
-                                    <Badge badgeContent={0} color="secondary">
-                                        <AssignmentTurnedInIcon
-                                            style={{ color: 'white' }}
-                                        />
-                                    </Badge>
-                                </IconButton>
-                            </Link>
-                            <Link
-                                to="/recipes"
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <IconButton
-                                    aria-label="go to storage"
-                                    color="inherit"
-                                >
-                                    <Badge badgeContent={0} color="secondary">
-                                        <KitchenIcon
-                                            style={{ color: 'white' }}
-                                        />
-                                    </Badge>
-                                </IconButton>
-                            </Link>
-                            <Link
-                                to="/storage"
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <IconButton
-                                    aria-label="go to storage"
-                                    color="inherit"
-                                >
-                                    <Badge badgeContent={0} color="secondary">
-                                        <InboxIcon style={{ color: 'white' }} />
-                                    </Badge>
-                                </IconButton>
-                            </Link>
-                            {/* <IconButton aria-label="show 17 new notifications" color="inherit">
+            <Typography className={classes.title} variant="h6" noWrap>
+              My Family
+            </Typography>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <Link to="/banking" style={{ textDecoration: 'none' }}>
+                <IconButton aria-label="go to storage" color="inherit">
+                  <Badge badgeContent={0} color="secondary">
+                    <AccountBalanceIcon style={{ color: 'white' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
+              <Link to="/vehicles" style={{ textDecoration: 'none' }}>
+                <IconButton aria-label="go to storage" color="inherit">
+                  <Badge badgeContent={0} color="secondary">
+                    <DirectionsCarIcon style={{ color: 'white' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
+              <Link to="/shopping" style={{ textDecoration: 'none' }}>
+                <IconButton aria-label="go to storage" color="inherit">
+                  <Badge badgeContent={0} color="secondary">
+                    <AssignmentTurnedInIcon style={{ color: 'white' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
+              <Link to="/recipes" style={{ textDecoration: 'none' }}>
+                <IconButton aria-label="go to storage" color="inherit">
+                  <Badge badgeContent={0} color="secondary">
+                    <KitchenIcon style={{ color: 'white' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
+              <Link to="/storage" style={{ textDecoration: 'none' }}>
+                <IconButton aria-label="go to storage" color="inherit">
+                  <Badge badgeContent={0} color="secondary">
+                    <InboxIcon style={{ color: 'white' }} />
+                  </Badge>
+                </IconButton>
+              </Link>
+              {/* <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -295,34 +253,34 @@ function App() {
             >
               <MoreIcon />
             </IconButton> */}
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                {renderMobileMenu}
-                {renderMenu}
-                <Switch>
-                    <Route path="/Banking">
-                        <>Banking</>
-                    </Route>
-                    <Route path="/vehicles">
-                        <>Vehicles</>
-                    </Route>
-                    <Route path="/shopping">
-                        <Shopping />
-                    </Route>
-                    <Route path="/recipes">
-                        <>Recipes</>
-                    </Route>
-                    <Route path="/storage">
-                        <Storage />
-                    </Route>
-                    <Route path="/">
-                        <>HOME</>
-                    </Route>
-                </Switch>
             </div>
-        </Router>
-    );
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+        <Switch>
+          <Route path="/Banking">
+            <>Banking</>
+          </Route>
+          <Route path="/vehicles">
+            <>Vehicles</>
+          </Route>
+          <Route path="/shopping">
+            <Shopping />
+          </Route>
+          <Route path="/recipes">
+            <>Recipes</>
+          </Route>
+          <Route path="/storage">
+            <Storage />
+          </Route>
+          <Route path="/">
+            <>HOME</>
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
 }
 
 export default App;

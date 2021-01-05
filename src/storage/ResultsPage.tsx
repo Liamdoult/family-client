@@ -9,67 +9,67 @@ import List from './List';
 import AddItem from './AddItem';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        padding: theme.spacing(2),
-        color: theme.palette.text.secondary,
-    },
-    table: {
-        minWidth: 650,
-    },
+  root: {
+    flexGrow: 1,
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary,
+  },
+  table: {
+    minWidth: 650,
+  },
 }));
 
 interface ResultsPageProps {
-    result: Box.Registered | Item.Registered;
+  result: Box.Registered | Item.Registered;
 }
 
 function ItemResult({ item }: { item: Item.Registered }) {
-    return <>{item ? <div>{item._id}</div> : <></>}</>;
+  return <>{item ? <div>{item._id}</div> : <></>}</>;
 }
 
 function BoxResult({ box }: { box: Box.Registered }) {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const [items, setItems] = useState<Item.Registered[]>(box.items);
+  const [items, setItems] = useState<Item.Registered[]>(box.items);
 
-    function deleteItem(id: string) {
-        /*StorageAPI.removeItems(box._id, [id]).then((updatedBox) =>
+  function deleteItem(id: string) {
+    /*StorageAPI.removeItems(box._id, [id]).then((updatedBox) =>
             setItems(updatedBox.items)
         );*/
-    }
+  }
 
-    async function addItem(item: Item.Base) {
-        try {
-            await box.addItem(item);
-            setItems(box.items);
-            return true;
-        } catch (err) {
-            console.log(err);
-            return false;
-        }
+  async function addItem(item: Item.Base) {
+    try {
+      await box.addItem(item);
+      setItems(box.items);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
     }
+  }
 
-    return (
-        <div className={classes.root}>
-            {box._id}
-            <br />
-            {box.label}
-            <br />
-            {box.location}
-            <br />
-            {box.created}
-            <br />
-            <br />
-            <List items={items} deleteItem={deleteItem} />
-            <AddItem addItem={addItem} />
-        </div>
-    );
+  return (
+    <div className={classes.root}>
+      {box._id}
+      <br />
+      {box.label}
+      <br />
+      {box.location}
+      <br />
+      {box.created}
+      <br />
+      <br />
+      <List items={items} deleteItem={deleteItem} />
+      <AddItem addItem={addItem} />
+    </div>
+  );
 }
 
 export default function ResultsPage({ result }: ResultsPageProps) {
-    if ((result as Box.Registered).label)
-        return <BoxResult box={result as Box.Registered} />;
-    if ((result as Item.Registered).name)
-        return <ItemResult item={result as Item.Registered} />;
-    return <div>ERROR: ITEM TYPE NOT FOUND</div>;
+  if ((result as Box.Registered).label)
+    return <BoxResult box={result as Box.Registered} />;
+  if ((result as Item.Registered).name)
+    return <ItemResult item={result as Item.Registered} />;
+  return <div>ERROR: ITEM TYPE NOT FOUND</div>;
 }

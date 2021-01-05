@@ -15,204 +15,194 @@ import { Shopping as ShoppingAPI } from '../api';
 import List from './List';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        color: theme.palette.text.secondary,
-        hight: '100vh',
-    },
-    table: {
-        minWidth: 650,
-    },
-    button: {
-        margin: theme.spacing(1),
-    },
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary,
+    hight: '100vh',
+  },
+  table: {
+    minWidth: 650,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
 
 export default function Shopping() {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const itemNameInput = useRef<HTMLInputElement | null>(null);
-    const [items, setItems] = useState<Array<ShoppingAPI.Item>>([]);
+  const itemNameInput = useRef<HTMLInputElement | null>(null);
+  const [items, setItems] = useState<Array<ShoppingAPI.Item>>([]);
 
-    const [itemName, setItemName] = useState<string>('');
-    const [itemDescription, setItemDescription] = useState<string>('');
-    const [itemQuantity, setItemQuantity] = useState<string>('');
-    const [itemMeasure, setItemMeasure] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false);
+  const [itemName, setItemName] = useState<string>('');
+  const [itemDescription, setItemDescription] = useState<string>('');
+  const [itemQuantity, setItemQuantity] = useState<string>('');
+  const [itemMeasure, setItemMeasure] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const [itemNameError, setItemNameError] = useState<boolean>(false);
-    const [itemDescriptionError, setItemDescriptionError] = useState<boolean>(
-        false
+  const [itemNameError, setItemNameError] = useState<boolean>(false);
+  const [itemDescriptionError, setItemDescriptionError] = useState<boolean>(
+    false
+  );
+  const [itemQuantityError, setItemQuantityError] = useState<boolean>(false);
+  const [itemMeasureError, setItemMeasureError] = useState<boolean>(false);
+
+  function updateItems() {
+    ShoppingAPI.get()
+      .then((items: Array<ShoppingAPI.Item>) => {
+        setItems(
+          items.map((item: ShoppingAPI.Item) => {
+            return { id: item._id, ...item };
+          })
+        );
+      })
+      .catch(console.log);
+  }
+
+  useEffect(updateItems, []);
+
+  function uploadItem() {
+    setLoading(true);
+    const quantity = parseInt(itemQuantity);
+
+    // Mark fields if invalid
+    if (!itemName) setItemNameError(true);
+    if (!quantity) setItemQuantityError(true);
+    if (!itemMeasure) setItemMeasureError(true);
+
+    // Exit if invalid
+    if (!itemName || !itemMeasure || !quantity) {
+      if (itemNameInput && itemNameInput.current) itemNameInput.current.focus();
+      return setLoading(false);
+    }
+
+    ShoppingAPI.create([
+      {
+        name: itemName,
+        description: itemDescription || '',
+        quantity: quantity,
+        measure: itemMeasure,
+      },
+    ]).then(() => {
+      updateItems();
+      setItemName('');
+      setItemDescription('');
+      setItemQuantity('');
+      setItemMeasure('');
+
+      setItemNameError(false);
+      setItemDescriptionError(false);
+      setItemQuantityError(false);
+      setItemMeasureError(false);
+
+      setLoading(false);
+
+      if (itemNameInput && itemNameInput.current) itemNameInput.current.focus();
+    });
+  }
+
+  function deleteItem(id: string) {
+    ShoppingAPI.deleted(id).then(() =>
+      setItems(items.filter((item) => item._id !== id))
     );
-    const [itemQuantityError, setItemQuantityError] = useState<boolean>(false);
-    const [itemMeasureError, setItemMeasureError] = useState<boolean>(false);
+  }
 
-    function updateItems() {
-        ShoppingAPI.get()
-            .then((items: Array<ShoppingAPI.Item>) => {
-                setItems(
-                    items.map((item: ShoppingAPI.Item) => {
-                        return { id: item._id, ...item };
-                    })
-                );
-            })
-            .catch(console.log);
-    }
-
-    useEffect(updateItems, []);
-
-    function uploadItem() {
-        setLoading(true);
-        const quantity = parseInt(itemQuantity);
-
-        // Mark fields if invalid
-        if (!itemName) setItemNameError(true);
-        if (!quantity) setItemQuantityError(true);
-        if (!itemMeasure) setItemMeasureError(true);
-
-        // Exit if invalid
-        if (!itemName || !itemMeasure || !quantity) {
-            if (itemNameInput && itemNameInput.current)
-                itemNameInput.current.focus();
-            return setLoading(false);
-        }
-
-        ShoppingAPI.create([
-            {
-                name: itemName,
-                description: itemDescription || '',
-                quantity: quantity,
-                measure: itemMeasure,
-            },
-        ]).then(() => {
-            updateItems();
-            setItemName('');
-            setItemDescription('');
-            setItemQuantity('');
-            setItemMeasure('');
-
-            setItemNameError(false);
-            setItemDescriptionError(false);
-            setItemQuantityError(false);
-            setItemMeasureError(false);
-
-            setLoading(false);
-
-            if (itemNameInput && itemNameInput.current)
-                itemNameInput.current.focus();
+  function checkItem(id: string) {
+    ShoppingAPI.purchased(id).then(() => {
+      const moved = items
+        .filter((item) => item._id === id)
+        .map((item) => {
+          return { ...item, checked: true };
         });
-    }
+      setItems(items.filter((item) => item._id !== id).concat(moved));
+    });
+  }
 
-    function deleteItem(id: string) {
-        ShoppingAPI.deleted(id).then(() =>
-            setItems(items.filter((item) => item._id !== id))
-        );
-    }
+  function uncheckItem(id: string) {
+    ShoppingAPI.unpurchased(id).then(() =>
+      setItems(
+        items.map((item) => {
+          if (item._id !== id) return item;
+          return { ...item, checked: false };
+        })
+      )
+    );
+  }
 
-    function checkItem(id: string) {
-        ShoppingAPI.purchased(id).then(() => {
-            const moved = items
-                .filter((item) => item._id === id)
-                .map((item) => {
-                    return { ...item, checked: true };
-                });
-            setItems(items.filter((item) => item._id !== id).concat(moved));
-        });
-    }
-
-    function uncheckItem(id: string) {
-        ShoppingAPI.unpurchased(id).then(() =>
-            setItems(
-                items.map((item) => {
-                    if (item._id !== id) return item;
-                    return { ...item, checked: false };
-                })
-            )
-        );
-    }
-
-    return (
-        <div className={classes.root}>
+  return (
+    <div className={classes.root}>
+      <br />
+      <Grid container spacing={3} justify="center" alignItems="center">
+        <Grid item xs={3}></Grid>
+        <Grid item xs={6}>
+          <Paper className={classes.paper}>
+            <h1>Shopping</h1>
             <br />
-            <Grid container spacing={3} justify="center" alignItems="center">
-                <Grid item xs={3}></Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.paper}>
-                        <h1>Shopping</h1>
-                        <br />
-                        <br />
-                        <div style={{ width: '100%' }}>
-                            <List
-                                items={items}
-                                deleteItem={deleteItem}
-                                checkItem={checkItem}
-                                uncheckItem={uncheckItem}
-                            />
-                        </div>
-                        <br />
-                        <TextField
-                            id="standard-basic"
-                            label="Name"
-                            error={itemNameError}
-                            value={itemName}
-                            inputRef={itemNameInput}
-                            onChange={(event) =>
-                                setItemName(event.target.value)
-                            }
-                            onKeyPress={(event) => {
-                                if (event.key === 'Enter') uploadItem();
-                            }}
-                        />
-                        <TextField
-                            id="standard-basic"
-                            label="Description"
-                            error={itemDescriptionError}
-                            value={itemDescription}
-                            onChange={(event) =>
-                                setItemDescription(event.target.value)
-                            }
-                        />
-                        <TextField
-                            id="standard-basic"
-                            label="Quantity"
-                            error={itemQuantityError}
-                            value={itemQuantity}
-                            onChange={(event) =>
-                                setItemQuantity(event.target.value)
-                            }
-                            onKeyPress={(event) => {
-                                if (event.key === 'Enter') uploadItem();
-                            }}
-                        />
-                        <TextField
-                            id="standard-basic"
-                            label="Measure"
-                            error={itemMeasureError}
-                            value={itemMeasure}
-                            onChange={(event) =>
-                                setItemMeasure(event.target.value)
-                            }
-                            onKeyPress={(event) => {
-                                if (event.key === 'Enter') uploadItem();
-                            }}
-                        />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            disabled={loading}
-                            className={classes.button}
-                            startIcon={<PlaylistAddIcon />}
-                            onClick={uploadItem}
-                        >
-                            Add
-                        </Button>
-                    </Paper>
-                </Grid>
-                <Grid item xs={3}></Grid>
-            </Grid>
-        </div>
-    );
+            <br />
+            <div style={{ width: '100%' }}>
+              <List
+                items={items}
+                deleteItem={deleteItem}
+                checkItem={checkItem}
+                uncheckItem={uncheckItem}
+              />
+            </div>
+            <br />
+            <TextField
+              id="standard-basic"
+              label="Name"
+              error={itemNameError}
+              value={itemName}
+              inputRef={itemNameInput}
+              onChange={(event) => setItemName(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') uploadItem();
+              }}
+            />
+            <TextField
+              id="standard-basic"
+              label="Description"
+              error={itemDescriptionError}
+              value={itemDescription}
+              onChange={(event) => setItemDescription(event.target.value)}
+            />
+            <TextField
+              id="standard-basic"
+              label="Quantity"
+              error={itemQuantityError}
+              value={itemQuantity}
+              onChange={(event) => setItemQuantity(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') uploadItem();
+              }}
+            />
+            <TextField
+              id="standard-basic"
+              label="Measure"
+              error={itemMeasureError}
+              value={itemMeasure}
+              onChange={(event) => setItemMeasure(event.target.value)}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') uploadItem();
+              }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              className={classes.button}
+              startIcon={<PlaylistAddIcon />}
+              onClick={uploadItem}
+            >
+              Add
+            </Button>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}></Grid>
+      </Grid>
+    </div>
+  );
 }
