@@ -12,7 +12,7 @@ export async function search(
   const jsn = await res.json();
   return {
     boxes: jsn.boxes.map((box: any) => new Box.Registered(box)),
-    items: jsn.boxes.map((item: any) => new Item.Registered(item)),
+    items: jsn.items.map((item: any) => new Item.Registered(item)),
   } as {
     boxes: Array<Box.Registered>;
     items: Array<Item.Registered>;
